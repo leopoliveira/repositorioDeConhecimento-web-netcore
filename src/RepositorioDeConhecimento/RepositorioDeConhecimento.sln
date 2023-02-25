@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositorioDeConhecimento", "RepositorioDeConhecimento.csproj", "{24C7C3FD-0BE7-4A50-91A3-D707B02484EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24C7C3FD-0BE7-4A50-91A3-D707B02484EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24C7C3FD-0BE7-4A50-91A3-D707B02484EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24C7C3FD-0BE7-4A50-91A3-D707B02484EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24C7C3FD-0BE7-4A50-91A3-D707B02484EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {731AA462-148C-47CB-9EDB-48A942CE2114}
+	EndGlobalSection
+EndGlobal
