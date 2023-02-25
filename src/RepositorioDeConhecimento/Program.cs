@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using RepositorioDeConhecimento.Infrastructure;
+using RepositorioDeConhecimento.Infrastructure.Context;
+using RepositorioDeConhecimento.Infrastructure.Repositories;
+using RepositorioDeConhecimento.Models.Domain.Repositories;
 
 namespace RepositorioDeConhecimento
 {
@@ -11,19 +13,26 @@ namespace RepositorioDeConhecimento
 
             string connectionString = builder.Configuration.GetConnectionString("DevConnection");
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-                            options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString));
+
+            // Automapper DI
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            // Repositories DI
+            builder.Services.AddScoped<IAutorRepository, AutorRepository>();
+            builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+            builder.Services.AddScoped<IConhecimentoRepository, ConhecimentoRepository>();
+            builder.Services.AddScoped<IImagemRepository,  ImagemRepository>();
+            builder.Services.AddScoped<ITagRepository, TagRepository>();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseExceptionHandler("/Repositorio/Error");
                 app.UseHsts();
             }
 

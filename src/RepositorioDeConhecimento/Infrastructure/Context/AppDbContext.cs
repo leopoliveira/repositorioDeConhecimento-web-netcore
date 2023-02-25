@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RepositorioDeConhecimento.Models.Domain.Entities;
 
-namespace RepositorioDeConhecimento.Infrastructure
+namespace RepositorioDeConhecimento.Infrastructure.Context
 {
     public class AppDbContext : DbContext
     {
