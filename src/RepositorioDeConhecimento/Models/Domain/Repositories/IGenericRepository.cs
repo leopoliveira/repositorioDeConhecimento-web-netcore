@@ -7,19 +7,21 @@ namespace RepositorioDeConhecimento.Models.Domain.Repositories
     {
         Task<TEntity> GetById(int id);
 
+        Task<IEnumerable<TEntity>> GetByPages(int page = 1, int offset = 10, int numberOfRecords = 10);
+
         Task<IEnumerable<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate);
 
-        void Insert(TEntity entity);
+        Task Insert(TEntity entity);
 
-        public void InsertRange(IEnumerable<TEntity> entities);
+        Task InsertRange(IEnumerable<TEntity> entities);
 
-        void Update(TEntity entity);
+        Task Update(TEntity entity);
 
-        public void UpdateRange(IEnumerable<TEntity> entities);
+        Task UpdateRange(IEnumerable<TEntity> entities);
 
-        void Delete(TEntity entity);
+        Task Delete(TEntity entity);
 
-        void DeleteRange(IEnumerable<TEntity> entities);
+        Task DeleteRange(IEnumerable<TEntity> entities);
 
     }
 }

@@ -16,3 +16,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+a.nav-link.active {
+    color: rgb(0, 119, 204) !important;
+}

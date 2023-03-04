@@ -9,7 +9,7 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        protected readonly AppDbContext _context;
+        private readonly AppDbContext _context;
 
         public GenericRepository(AppDbContext context)
         {
@@ -22,6 +22,15 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
                         .FirstOrDefaultAsync(entity => entity.Id == id);
         }
 
+        public async Task<IEnumerable<TEntity>> GetByPages(int page = 1, int offset = 10, int numberOfRecords = 10)
+        {
+            return await _context.Set<TEntity>()
+                        .Skip((page - 1) * offset)
+                        .Take(numberOfRecords)
+                        .OrderBy(entity => entity.Id)
+                        .ToListAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate)
         {
             return await _context.Set<TEntity>()
@@ -29,7 +38,7 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
                         .ToListAsync();
         }
 
-        public async void Insert(TEntity entity)
+        public async Task Insert(TEntity entity)
         {
             try
             {
@@ -42,7 +51,7 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             }  
         }
 
-        public async void InsertRange(IEnumerable<TEntity> entities)
+        public async Task InsertRange(IEnumerable<TEntity> entities)
         {
             try
             {
@@ -55,7 +64,7 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             }
         }
 
-        public async void Update(TEntity entity)
+        public async Task Update(TEntity entity)
         {
             try
             {
@@ -73,7 +82,7 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             } 
         }
 
-        public async void UpdateRange(IEnumerable<TEntity> entities)
+        public async Task UpdateRange(IEnumerable<TEntity> entities)
         {
             try
             {
@@ -90,7 +99,7 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             }
         }
 
-        public async void Delete(TEntity entity)
+        public async Task Delete(TEntity entity)
         {
             try
             {
@@ -108,7 +117,7 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             }
         }
 
-        public async void DeleteRange(IEnumerable<TEntity> entities)
+        public async Task DeleteRange(IEnumerable<TEntity> entities)
         {
             try
             {

@@ -1,4 +1,6 @@
-﻿namespace RepositorioDeConhecimento.Models.Application.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RepositorioDeConhecimento.Models.Application.DTO
 {
     public class ConhecimentoDTO : BaseDto
     {
@@ -8,17 +10,18 @@
             Imagens = new List<ImagemDTO>();
         }
 
+        [MaxLength(50)]
         public string Titulo { get; set; }
 
         public string Conteudo { get; set; }
 
         public int AutorId { get; set; }
 
-        public AutorDTO Autor { get; set; }
+        public AutorDTO? Autor { get; set; }
 
         public int CategoriaId { get; set; }
 
-        public CategoriaDTO Categoria { get; set; }
+        public CategoriaDTO? Categoria { get; set; }
 
         public ICollection<ImagemDTO>? Imagens { get; set; }
 

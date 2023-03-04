@@ -15,12 +15,11 @@ namespace RepositorioDeConhecimento.Models.Domain.Entities
         [StringLength(10)]
         public string TipoArquivo { get; set; }
 
-        [Column(TypeName = "int")]
         public int TamanhoArquivo { get; set; }
 
-        [ForeignKey("Conhecimento")]
         public int? ConhecimentoId { get; set; }
 
+        [NotMapped]
         public Conhecimento Conhecimento { get; set; }
     }
 }

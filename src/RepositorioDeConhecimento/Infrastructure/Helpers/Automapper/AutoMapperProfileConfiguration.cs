@@ -9,13 +9,13 @@ namespace RepositorioDeConhecimento.Infrastructure.Helpers.Automapper
         public AutoMapperProfileConfiguration()
         {
             CreateMap<Autor, AutorDTO>()
-                .ForMember(des => des.FotoId, src => src.MapFrom(src => src.Id))
-                .ForMember(des => des.Foto, src => src.MapFrom(src => src.Foto))
+                /*.ForMember(des => des.FotoId, src => src.MapFrom(src => src.Id))
+                .ForMember(des => des.Foto, src => src.MapFrom(src => src.Foto))*/
                 .ReverseMap();
 
             CreateMap<Categoria, CategoriaDTO>()
-                .ForMember(des => des.IconeId, src => src.MapFrom(src => src.Id))
-                .ForMember(des => des.Icone, src => src.MapFrom(src => src.Icone))
+                /*.ForMember(des => des.IconeId, src => src.MapFrom(src => src.Id))
+                .ForMember(des => des.Icone, src => src.MapFrom(src => src.Icone))*/
                 .ReverseMap();
 
             CreateMap<Conhecimento, ConhecimentoDTO>()
@@ -26,8 +26,8 @@ namespace RepositorioDeConhecimento.Infrastructure.Helpers.Automapper
                 .ReverseMap();
 
             CreateMap<Imagem, ImagemDTO>()
-                .ForMember(des => des.ConhecimentoId, src => src.MapFrom(src => src.Id))
-                .ForMember(des => des.Conhecimento, src => src.MapFrom(src => src.Conhecimento))
+                /*.ForMember(des => des.ConhecimentoId, src => src.MapFrom(src => src.Id))
+                .ForMember(des => des.Conhecimento, src => src.MapFrom(src => src.Conhecimento))*/
                 .ReverseMap();
 
             CreateMap<Tag, TagDTO>()

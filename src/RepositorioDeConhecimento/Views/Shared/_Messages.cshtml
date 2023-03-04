@@ -1,0 +1,46 @@
+﻿@if (TempData.ContainsKey("message"))
+{
+    Message message = Message.Deserialize(TempData["message"].ToString());
+
+    @switch (message.Type)
+    {
+        case MessageType.Success:
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <h4 class="alert-heading">Sucesso</h4>
+                <p class="mb-0">
+                    @message.Text
+                </p>
+            </div>
+            break;
+        case MessageType.Error:
+            <div class="alert alert-dismissible alert-danger">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <h4 class="alert-heading">Erro</h4>
+                <p class="mb-0">
+                    @message.Text
+                </p>
+            </div>
+            break;
+        case MessageType.Warning:
+            <div class="alert alert-dismissible alert-warning">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <h4 class="alert-heading">Erro</h4>
+                <p class="mb-0">
+                    @message.Text
+                </p>
+            </div>
+            break;
+        case MessageType.Info:
+            <div class="alert alert-dismissible alert-info">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <h4 class="alert-heading">Erro</h4>
+                <p class="mb-0">
+                    @message.Text
+                </p>
+            </div>
+        break;
+    }
+
+
+}

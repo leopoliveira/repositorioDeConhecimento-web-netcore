@@ -35,7 +35,6 @@ namespace RepositorioDeConhecimento.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("FotoId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -54,8 +53,6 @@ namespace RepositorioDeConhecimento.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FotoId");
-
                     b.ToTable("Autores");
                 });
 
@@ -72,7 +69,6 @@ namespace RepositorioDeConhecimento.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<int?>("IconeId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -81,8 +77,6 @@ namespace RepositorioDeConhecimento.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IconeId");
 
                     b.ToTable("Categorias");
                 });
@@ -128,7 +122,6 @@ namespace RepositorioDeConhecimento.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("ConhecimentoId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<byte[]>("Conteudo")
@@ -149,8 +142,6 @@ namespace RepositorioDeConhecimento.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConhecimentoId");
 
                     b.ToTable("Imagens");
                 });
@@ -178,28 +169,6 @@ namespace RepositorioDeConhecimento.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("RepositorioDeConhecimento.Models.Domain.Entities.Autor", b =>
-                {
-                    b.HasOne("RepositorioDeConhecimento.Models.Domain.Entities.Imagem", "Foto")
-                        .WithMany()
-                        .HasForeignKey("FotoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Foto");
-                });
-
-            modelBuilder.Entity("RepositorioDeConhecimento.Models.Domain.Entities.Categoria", b =>
-                {
-                    b.HasOne("RepositorioDeConhecimento.Models.Domain.Entities.Imagem", "Icone")
-                        .WithMany()
-                        .HasForeignKey("IconeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Icone");
-                });
-
             modelBuilder.Entity("RepositorioDeConhecimento.Models.Domain.Entities.Conhecimento", b =>
                 {
                     b.HasOne("RepositorioDeConhecimento.Models.Domain.Entities.Autor", "Autor")
@@ -217,17 +186,6 @@ namespace RepositorioDeConhecimento.Migrations
                     b.Navigation("Autor");
 
                     b.Navigation("Categoria");
-                });
-
-            modelBuilder.Entity("RepositorioDeConhecimento.Models.Domain.Entities.Imagem", b =>
-                {
-                    b.HasOne("RepositorioDeConhecimento.Models.Domain.Entities.Conhecimento", "Conhecimento")
-                        .WithMany()
-                        .HasForeignKey("ConhecimentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Conhecimento");
                 });
 
             modelBuilder.Entity("RepositorioDeConhecimento.Models.Domain.Entities.Tag", b =>

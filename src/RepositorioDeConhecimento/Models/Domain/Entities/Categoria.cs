@@ -11,9 +11,9 @@ namespace RepositorioDeConhecimento.Models.Domain.Entities
         [StringLength(200)]
         public string? Descricao { get; set; }
 
-        [ForeignKey("Icone")]
         public int? IconeId { get; set; }
 
+        [NotMapped]
         public Imagem Icone { get; set; }
     }
 }

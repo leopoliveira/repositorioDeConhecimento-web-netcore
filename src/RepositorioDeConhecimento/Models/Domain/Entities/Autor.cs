@@ -17,9 +17,9 @@ namespace RepositorioDeConhecimento.Models.Domain.Entities
         [StringLength(6)]
         public string Sigla { get; set; }
 
-        [ForeignKey("Foto")]
         public int? FotoId { get; set; }
 
+        [NotMapped]
         public Imagem Foto { get; set; }
     }
 }
