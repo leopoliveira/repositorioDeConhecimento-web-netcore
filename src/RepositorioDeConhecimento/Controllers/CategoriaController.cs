@@ -41,6 +41,10 @@ namespace RepositorioDeConhecimento.Controllers
             return View(dtoCategorias);
         }
 
+        /// <summary>
+        /// Gets a specific Categoria by Id.
+        /// </summary>
+        /// <returns>That specific Categoria</returns>
         [HttpGet]
         public async Task<IActionResult> GetCategoria(int id)
         {
