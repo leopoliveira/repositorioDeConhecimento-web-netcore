@@ -43,7 +43,7 @@
             <label asp-for="Conhecimento.AutorId" class="form-label">Autor:</label>
             @if (temAutorCadastrado)
             {
-                <select class="form-select" aria-label="Autor select list" required>
+                <select class="form-select" aria-label="Autor select list" required asp-for="Conhecimento.AutorId">
                     <option selected>Selecione um Autor:</option>
                     @foreach (AutorDTO autor in Model.Autores)
                     {
@@ -59,8 +59,8 @@
             <label asp-for="Conhecimento.CategoriaId" class="form-label">Categoria:</label>
             @if (temCategoriaCadastrada)
             {
-                <select class="form-select" aria-label="Autor select list" required>
-                    <option selected>Selecione um Autor:</option>
+                <select class="form-select" aria-label="Autor select list" required asp-for="Conhecimento.CategoriaId">
+                    <option selected>Selecione uma Categoria:</option>
                     @foreach (CategoriaDTO categoria in Model.Categorias)
                     {
                         <option value="@categoria.Id">@categoria.Nome</option>

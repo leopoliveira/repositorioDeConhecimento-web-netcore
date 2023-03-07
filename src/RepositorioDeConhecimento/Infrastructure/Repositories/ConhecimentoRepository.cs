@@ -22,6 +22,7 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
                 .Include(c => c.Autor)
                 .Skip((page - 1) * offset)
                 .Take(numberOfRecords)
+                .OrderBy(c => c.Categoria.Nome)
                 .ToListAsync();
         }
 

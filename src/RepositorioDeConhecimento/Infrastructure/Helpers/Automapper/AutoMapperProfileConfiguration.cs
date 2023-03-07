@@ -19,9 +19,9 @@ namespace RepositorioDeConhecimento.Infrastructure.Helpers.Automapper
                 .ReverseMap();
 
             CreateMap<Conhecimento, ConhecimentoDTO>()
-                .ForMember(des => des.AutorId, src => src.MapFrom(src => src.Id))
+                .ForMember(des => des.AutorId, src => src.MapFrom(src => src.AutorId))
                 .ForMember(des => des.Autor, src => src.MapFrom(src => src.Autor))
-                .ForMember(des => des.CategoriaId, src => src.MapFrom(src => src.Id))
+                .ForMember(des => des.CategoriaId, src => src.MapFrom(src => src.CategoriaId))
                 .ForMember(des => des.Categoria, src => src.MapFrom(src => src.Categoria))
                 .ReverseMap();
 

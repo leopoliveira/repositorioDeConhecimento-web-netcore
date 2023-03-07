@@ -14,9 +14,20 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             _context = context;
         }
 
+        public override async Task<IEnumerable<Autor>> GetByPages(int page = 1, int offset = 10, int numberOfRecords = 10)
+        {
+            return await _context.Autores
+                        .Skip((page - 1) * offset)
+                        .Take(numberOfRecords)
+                        .OrderBy(entity => entity.Nome)
+                        .ToListAsync();
+        }
+
         public async Task<ICollection<Autor>> GetAll()
         {
-            return await _context.Autores.ToListAsync();
+            return await _context.Autores
+                .OrderBy(a => a.Nome)
+                .ToListAsync();
         }
     }
 }

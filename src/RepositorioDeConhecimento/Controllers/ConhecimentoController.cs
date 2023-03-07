@@ -29,7 +29,7 @@ namespace RepositorioDeConhecimento.Controllers
         /// </summary>
         /// <returns>Conhecinentos</returns>
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int offset = 10, int numberOfRecords = 10)
+        public async Task<IActionResult> Index(int page = 1, int offset = 10, int numberOfRecords = 50)
         {
             IEnumerable<Conhecimento> conhecimentos = await _repository.GetByPages(page, offset, numberOfRecords);
 
@@ -158,6 +158,7 @@ namespace RepositorioDeConhecimento.Controllers
         {
             Conhecimento conhecimento = new Conhecimento();
 
+            conhecimento.Id = conhecimentoViewModel.Conhecimento.Id;
             conhecimento.Titulo = conhecimentoViewModel.Conhecimento.Titulo;
             conhecimento.Conteudo = conhecimentoViewModel.Conhecimento.Conteudo;
             conhecimento.CategoriaId = conhecimentoViewModel.Conhecimento.CategoriaId;

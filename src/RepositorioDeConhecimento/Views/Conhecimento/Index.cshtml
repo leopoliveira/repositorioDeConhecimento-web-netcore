@@ -29,9 +29,9 @@
             <table class="table table-responsive-lg table-hover table-striped tabela-categorias">
                 <thead>
                     <tr>
+                        <th scope="col" class="fw-bold text-center">Categoria</th>
                         <th scope="col" class="fw-bold text-center">Título</th>
                         <th scope="col" class="fw-bold text-center">Autor</th>
-                        <th scope="col" class="fw-bold text-center">Categoria</th>
                         <th scope="col" class="fw-bold text-center">Ações</th>
                     </tr>
                 </thead>
@@ -39,18 +39,18 @@
                     @foreach (ConhecimentoDTO conhecimento in Model)
                     {
                         <tr class="fs-6">
-                            <td class="align-middle text-center">@conhecimento.Titulo</td>
-                            @if (conhecimento.Autor != null)
+                            @if (conhecimento.Categoria != null)
                             {
-                                <td class="align-middle text-center">@conhecimento.Autor.Nome</td>
+                                <td class="align-middle text-center">@conhecimento.Categoria.Nome</td>
                             }
                             else
                             {
                                 <td class="align-middle text-center">-</td>
                             }
-                            @if (conhecimento.Categoria != null)
+                            <td class="align-middle text-center">@conhecimento.Titulo</td>
+                            @if (conhecimento.Autor != null)
                             {
-                                <td class="align-middle text-center">@conhecimento.Categoria.Nome</td>
+                                <td class="align-middle text-center">@conhecimento.Autor.Sigla</td>
                             }
                             else
                             {
