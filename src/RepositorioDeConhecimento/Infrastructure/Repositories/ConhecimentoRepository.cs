@@ -20,9 +20,9 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             return await _context.Conhecimentos
                 .Include(c => c.Categoria)
                 .Include(c => c.Autor)
+                .OrderBy(c => c.Categoria.Nome)
                 .Skip((page - 1) * offset)
                 .Take(numberOfRecords)
-                .OrderBy(c => c.Categoria.Nome)
                 .ToListAsync();
         }
 

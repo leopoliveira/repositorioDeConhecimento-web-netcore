@@ -73,6 +73,9 @@ namespace RepositorioDeConhecimento.Controllers
             {
                 TempData["message"] = Message.CreateMessage("Dados inválidos. Por favor, revise os dados inseridos", MessageType.Error);
 
+                viewModel.Categorias = await GetCategorias();
+                viewModel.Autores = await GetAutores();
+
                 return View(viewModel);
             }
 
