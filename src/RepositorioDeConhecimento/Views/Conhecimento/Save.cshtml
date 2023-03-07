@@ -1,0 +1,97 @@
+﻿@model ConhecimentoViewModel
+
+@{
+    string acao = ViewContext.RouteData.Values["id"] != null ? "Editar" : "Criar";
+    ViewData["Title"] = acao + " Conhecimento";
+
+    bool temAutorCadastrado = Model.Autores != null;
+    bool temCategoriaCadastrada = Model.Categorias != null;
+}
+
+<div class="container-sm mt-4">
+
+    <div class="row g-lg-3 text-center">
+        <div class="col-lg-4">
+            <h1>
+                @acao Conhecimento
+            </h1>
+        </div>
+
+        <div class="col-lg-4 offset-lg-4">
+            <a class="btn btn-lg btn-danger" asp-action="Index">Cancelar</a>
+        </div>
+
+    </div>
+
+    <hr />
+
+    <!-- Div para receber os erros de ModeState.AddModelError -->
+    <div asp-validation-summary="ModelOnly" class="validation-summary text-danger mb-3">
+
+    </div>
+
+    <div class="mt-3 row">
+        <form method="post" asp-controller="Conhecimento" asp-action="Save" class="row g-3">
+            <input hidden asp-for="Conhecimento.Id" />
+
+            <div class="col-lg-12 form-group">
+                <label asp-for="Conhecimento.Titulo" class="form-label">Titulo:</label>
+                <input asp-for="Conhecimento.Titulo" class="form-control" autofocus />
+                <span asp-validation-for="Conhecimento.Titulo" class="alert-danger"></span>
+            </div>
+
+            <label asp-for="Conhecimento.AutorId" class="form-label">Autor:</label>
+            @if (temAutorCadastrado)
+            {
+                <select class="form-select" aria-label="Autor select list" required>
+                    <option selected>Selecione um Autor:</option>
+                    @foreach (AutorDTO autor in Model.Autores)
+                    {
+                        <option value="@autor.Id">@autor.Nome</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <p>É necessário cadastrar ao menos um Autor.</p>
+            }
+
+            <label asp-for="Conhecimento.CategoriaId" class="form-label">Categoria:</label>
+            @if (temCategoriaCadastrada)
+            {
+                <select class="form-select" aria-label="Autor select list" required>
+                    <option selected>Selecione um Autor:</option>
+                    @foreach (CategoriaDTO categoria in Model.Categorias)
+                    {
+                        <option value="@categoria.Id">@categoria.Nome</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <p>É necessário cadastrar ao menos uma Categoria.</p>
+            }
+
+            <div class="col-lg-12 form-group">
+                <label asp-for="Conhecimento.Conteudo" class="form-label">Conteúdo:</label>
+                <textarea class="form-control" rows="5" asp-for="Conhecimento.Conteudo"></textarea>
+                <span asp-validation-for="Conhecimento.Conteudo" class="alert-danger"></span>
+            </div>
+
+            @* Aqui, utilizar Javascript para criar um objeto do tipo Imagem, pegar o id e enviar isso no model dessa View
+        <div class="col-lg-12 form-group">
+          <label for="formFile" class="form-label mt-4">Default file input example</label>
+          <input class="form-control" type="file" id="formFile">
+        </div>
+            *@
+
+            <div class="form-row">
+                <div class="col-lg-4 form-group">
+                    <button type="submit" class="btn btn-lg btn-primary">Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+

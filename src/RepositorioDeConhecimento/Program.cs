@@ -32,7 +32,7 @@ namespace RepositorioDeConhecimento
 
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Repositorio/Error");
+                app.UseExceptionHandler("/Conhecimento/Error");
                 app.UseHsts();
             }
 
@@ -45,7 +45,7 @@ namespace RepositorioDeConhecimento
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Repositorio}/{action=Index}/{id?}");
+                pattern: "{controller=Conhecimento}/{action=Index}/{id?}");
 
             app.Run();
         }

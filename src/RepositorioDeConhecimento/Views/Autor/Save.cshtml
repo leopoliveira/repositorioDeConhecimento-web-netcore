@@ -38,19 +38,19 @@
             </div>
 
             <div class="col-lg-5 form-group">
-                <label asp-for="Email" class="form-label">Descrição:</label>
+                <label asp-for="Email" class="form-label">E-mail:</label>
                 <input asp-for="Email" class="form-control" placeholder="mail@mail.com" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" />
                 <span asp-validation-for="Email" class="alert-danger"></span>
             </div>
 
             <div class="col-lg-5 form-group">
-                <label asp-for="Telefone" class="form-label">Descrição:</label>
+                <label asp-for="Telefone" class="form-label">Telefone:</label>
                 <input asp-for="Telefone" class="form-control" placeholder="(00) 00000-0000" pattern="\(\d{2}\) \d{4,5}-\d{4}" />
                 <span asp-validation-for="Telefone" class="alert-danger"></span>
             </div>
 
             <div class="col-lg-2 form-group">
-                <label asp-for="Sigla" class="form-label">Descrição:</label>
+                <label asp-for="Sigla" class="form-label">Sigla:</label>
                 <input asp-for="Sigla" class="form-control" maxlength="3" placeholder="Máx. 3 caracteres" />
                 <span asp-validation-for="Sigla" class="alert-danger"></span>
             </div>

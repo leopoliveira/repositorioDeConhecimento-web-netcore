@@ -31,9 +31,9 @@ namespace RepositorioDeConhecimento.Controllers
 
             ICollection<CategoriaDTO> dtoCategorias = new List<CategoriaDTO>();
 
-            foreach (Categoria categoria in categorias)
+            foreach (Categoria conhecimento in categorias)
             {
-                CategoriaDTO dto = _mapper.Map<CategoriaDTO>(categoria);
+                CategoriaDTO dto = _mapper.Map<CategoriaDTO>(conhecimento);
 
                 dtoCategorias.Add(dto);
             }
@@ -48,9 +48,9 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCategoria(int id)
         {
-            Categoria categoria = await _repository.GetById(id);
+            Categoria conhecimento = await _repository.GetById(id);
 
-            CategoriaDTO dto =  _mapper.Map<CategoriaDTO>(categoria) ?? new CategoriaDTO();
+            CategoriaDTO dto =  _mapper.Map<CategoriaDTO>(conhecimento) ?? new CategoriaDTO();
 
             return View("Save", dto);
         }
@@ -72,15 +72,15 @@ namespace RepositorioDeConhecimento.Controllers
 
             dto.IconeId ??= 0;
 
-            Categoria categoria = _mapper.Map<Categoria>(dto);
+            Categoria conhecimento = _mapper.Map<Categoria>(dto);
 
-            if(categoria.Id > 0)
+            if(conhecimento.Id > 0)
             {
-                await _repository.Update(categoria);
+                await _repository.Update(conhecimento);
             }
             else
             {
-                await _repository.Insert(categoria);
+                await _repository.Insert(conhecimento);
             }
             
 
@@ -103,15 +103,15 @@ namespace RepositorioDeConhecimento.Controllers
                 return View("Index");
             }
 
-            Categoria categoria = await _repository.GetById(id);
+            Categoria conhecimento = await _repository.GetById(id);
 
-            if (categoria == null)
+            if (conhecimento == null)
             {
                 TempData["message"] = Message.CreateMessage("Erro. Informe um Id válido", MessageType.Error);
                 return View("Index");
             }
 
-            CategoriaDTO categoriaDTO = _mapper.Map<CategoriaDTO>(categoria);
+            CategoriaDTO categoriaDTO = _mapper.Map<CategoriaDTO>(conhecimento);
 
             return View("Delete", categoriaDTO);
         }
@@ -130,9 +130,9 @@ namespace RepositorioDeConhecimento.Controllers
                 return View(dto);
             }
 
-            Categoria categoria = _mapper.Map<Categoria>(dto);
+            Categoria conhecimento = _mapper.Map<Categoria>(dto);
 
-            await _repository.Delete(categoria);
+            await _repository.Delete(conhecimento);
 
             TempData["message"] = Message.CreateMessage("Dados excluídos com sucesso!", MessageType.Success);
 

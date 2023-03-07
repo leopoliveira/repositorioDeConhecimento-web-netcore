@@ -1,0 +1,77 @@
+﻿@model IEnumerable<ConhecimentoDTO>
+
+@{
+    ViewData["Title"] = "Conhecimentos";
+}
+
+<div class="container-sm mt-4">
+
+    <div class="row g-lg-3 text-center">
+        <div class="col-lg-3">
+            <h1>
+                Conhecimentos
+            </h1>
+        </div>
+        <div class="offset-lg-4 col-lg-2 mb-2">
+            <a class="btn btn-lg btn-danger" asp-action="Index" asp-controller="Conhecimento">Cancelar</a>
+        </div>
+        <div class="col-lg-2 mb-2">
+            <a class="btn btn-lg btn-outline-primary text-nowrap" asp-action="GetConhecimento">Nova Conhecimento</a>
+        </div>
+
+    </div>
+
+    <hr />
+
+    @if (Model.Any())
+    {
+        <div class="row g-lg-3 mt-4">
+            <table class="table table-responsive-lg table-hover table-striped tabela-categorias">
+                <thead>
+                    <tr>
+                        <th scope="col" class="fw-bold text-center">Título</th>
+                        <th scope="col" class="fw-bold text-center">Autor</th>
+                        <th scope="col" class="fw-bold text-center">Categoria</th>
+                        <th scope="col" class="fw-bold text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ConhecimentoDTO conhecimento in Model)
+                    {
+                        <tr class="fs-6">
+                            <td class="align-middle text-center">@conhecimento.Titulo</td>
+                            @if (conhecimento.Autor != null)
+                            {
+                                <td class="align-middle text-center">@conhecimento.Autor.Nome</td>
+                            }
+                            else
+                            {
+                                <td class="align-middle text-center">-</td>
+                            }
+                            @if (conhecimento.Categoria != null)
+                            {
+                                <td class="align-middle text-center">@conhecimento.Categoria.Nome</td>
+                            }
+                            else
+                            {
+                                <td class="align-middle text-center">-</td>
+                            }
+                            <td class="align-middle text-center">
+                                <a class="btn btn-lg btn-outline-danger" asp-action="Delete" asp-route-id="@conhecimento.Id">
+                                    Apagar
+                                </a>
+                                <a class="btn btn-lg btn-outline-primary" asp-action="GetConhecimento" asp-route-id="@conhecimento.Id">
+                                    Editar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>Não existem Conhecimentos cadastrados. <a class="btn btn-outline-primary" asp-action="GetConhecimento">Cadastre seu primeiro Conhecimento.</a></p>
+    }
+</div>

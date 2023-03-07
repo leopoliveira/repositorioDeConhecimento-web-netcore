@@ -13,7 +13,7 @@
             </h1>
         </div>
         <div class="offset-lg-4 col-lg-2 mb-2">
-            <a class="btn btn-lg btn-danger" asp-action="Index" asp-controller="Repositorio">Cancelar</a>
+            <a class="btn btn-lg btn-danger" asp-action="Index" asp-controller="Conhecimento">Cancelar</a>
         </div>
         <div class="col-lg-2 mb-2">
             <a class="btn btn-lg btn-outline-primary text-nowrap" asp-action="GetCategoria">Nova Categoria</a>
@@ -34,15 +34,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (CategoriaDTO categoria in Model)
+                    @foreach (CategoriaDTO conhecimento in Model)
                     {
                         <tr class="fs-6">
-                            <td class="align-middle text-center">@categoria.Nome</td>
+                            <td class="align-middle text-center">@conhecimento.Nome</td>
                             <td class="align-middle text-center">
-                                <a class="btn btn-lg btn-outline-danger" asp-action="Delete" asp-route-id="@categoria.Id">
+                                <a class="btn btn-lg btn-outline-danger" asp-action="Delete" asp-route-id="@conhecimento.Id">
                                     Apagar
                                 </a>
-                                <a class="btn btn-lg btn-outline-primary" asp-action="GetCategoria" asp-route-id="@categoria.Id">
+                                <a class="btn btn-lg btn-outline-primary" asp-action="GetCategoria" asp-route-id="@conhecimento.Id">
                                     Editar
                                 </a>
                             </td>

@@ -3,5 +3,6 @@ namespace RepositorioDeConhecimento.Models.Domain.Repositories
 {
     public interface ICategoriaRepository : IGenericRepository<Categoria>
     {
+        Task<ICollection<Categoria>> GetAll();
     }
 }

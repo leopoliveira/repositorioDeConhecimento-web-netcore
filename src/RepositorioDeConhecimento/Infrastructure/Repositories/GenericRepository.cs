@@ -16,13 +16,13 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<TEntity> GetById(int id)
+        public virtual async Task<TEntity> GetById(int id)
         {
             return await _context.Set<TEntity>()
                         .FirstOrDefaultAsync(entity => entity.Id == id);
         }
 
-        public async Task<IEnumerable<TEntity>> GetByPages(int page = 1, int offset = 10, int numberOfRecords = 10)
+        public virtual async Task<IEnumerable<TEntity>> GetByPages(int page = 1, int offset = 10, int numberOfRecords = 10)
         {
             return await _context.Set<TEntity>()
                         .Skip((page - 1) * offset)
@@ -31,7 +31,7 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
                         .ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<IEnumerable<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate)
         {
             return await _context.Set<TEntity>()
                         .Where(predicate)
