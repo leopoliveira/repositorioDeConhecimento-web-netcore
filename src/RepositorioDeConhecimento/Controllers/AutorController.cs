@@ -23,25 +23,30 @@ namespace RepositorioDeConhecimento.Controllers
         /// </summary>
         /// <returns>Autores</returns>
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int offset = 10, int numberOfRecords = 10)
+        public async Task<IActionResult> Index(int page = 1, int offset = 10, int numberOfRecords = 10, string searchTerm = "")
         {
-            IEnumerable<Autor> autores = await _repository.GetByPages(page, offset, numberOfRecords);
+            IEnumerable<Autor> autores;
 
-            ICollection<AutorDTO> dtoAutores = new List<AutorDTO>();
-
-            foreach (Autor autor in autores)
+            if (!string.IsNullOrEmpty(searchTerm) || !string.IsNullOrWhiteSpace(searchTerm))
             {
-                AutorDTO dto = _mapper.Map<AutorDTO>(autor);
+                autores = await _repository.GetWhere(a =>
+                                                    a.Nome.Contains(searchTerm) ||
+                                                    a.Email.Contains(searchTerm));
 
-                dtoAutores.Add(dto);
+                ViewBag.TotalOfPages = 0;
+                ViewBag.CurrentPage = 0;
+
+                return View(ConvertAutorToDto(autores));
             }
+
+            autores = await _repository.GetByPages(page, offset, numberOfRecords);
 
             int totalOfRecords = await _repository.CountRecords();
 
             ViewBag.TotalOfPages = Math.Ceiling(Convert.ToDecimal(totalOfRecords) / offset);
             ViewBag.CurrentPage = page;
 
-            return View(dtoAutores);
+            return View(ConvertAutorToDto(autores));
         }
 
         /// <summary>
@@ -141,5 +146,19 @@ namespace RepositorioDeConhecimento.Controllers
 
             return RedirectToAction("Index");
         }
+
+        private ICollection<AutorDTO> ConvertAutorToDto(IEnumerable<Autor> autores)
+        {
+            ICollection<AutorDTO> dtoAutores = new List<AutorDTO>();
+
+            foreach (Autor autor in autores)
+            {
+                AutorDTO dto = _mapper.Map<AutorDTO>(autor);
+
+                dtoAutores.Add(dto);
+            }
+
+            return dtoAutores;
+        }   
     }
 }

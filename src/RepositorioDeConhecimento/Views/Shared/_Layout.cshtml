@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    var controller = (string)ViewContext.RouteData.Values["controller"];
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -30,8 +34,8 @@
                             <a class="nav-link" asp-controller="Autor" asp-action="Index">Autores</a>
                         </li>
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-sm-2" type="search" placeholder="Buscar">
+                    <form method="get" class="d-flex" asp-controller="@controller" asp-action="Index">
+                        <input name="searchTerm" class="form-control me-sm-2" type="text" placeholder="Buscar">
                         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Buscar</button>
                     </form>
                 </div>

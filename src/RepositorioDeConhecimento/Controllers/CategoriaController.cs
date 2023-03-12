@@ -25,25 +25,30 @@ namespace RepositorioDeConhecimento.Controllers
         /// </summary>
         /// <returns>Categorias</returns>
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int offset = 10, int numberOfRecords = 10)
+        public async Task<IActionResult> Index(int page = 1, int offset = 10, int numberOfRecords = 10, string searchTerm = "")
         {
-            IEnumerable<Categoria> categorias = await _repository.GetByPages(page, offset, numberOfRecords);
+            IEnumerable<Categoria> categorias;
 
-            ICollection<CategoriaDTO> dtoCategorias = new List<CategoriaDTO>();
-
-            foreach (Categoria conhecimento in categorias)
+            if (!string.IsNullOrEmpty(searchTerm) || !string.IsNullOrWhiteSpace(searchTerm))
             {
-                CategoriaDTO dto = _mapper.Map<CategoriaDTO>(conhecimento);
+                categorias = await _repository.GetWhere(c =>
+                                                        c.Nome.Contains(searchTerm) ||
+                                                        c.Descricao.Contains(searchTerm));
 
-                dtoCategorias.Add(dto);
+                ViewBag.TotalOfPages = 0;
+                ViewBag.CurrentPage = 0;
+
+                return View(ConvertCategoriaToDto(categorias));
             }
+
+            categorias = await _repository.GetByPages(page, offset, numberOfRecords);
 
             int totalOfRecords = await _repository.CountRecords();
 
             ViewBag.TotalOfPages = Math.Ceiling(Convert.ToDecimal(totalOfRecords) / offset);
             ViewBag.CurrentPage = page;
 
-            return View(dtoCategorias);
+            return View(ConvertCategoriaToDto(categorias));
         }
 
         /// <summary>
@@ -142,6 +147,20 @@ namespace RepositorioDeConhecimento.Controllers
             TempData["message"] = Message.CreateMessage("Dados excluídos com sucesso!", MessageType.Success);
 
             return RedirectToAction("Index");
+        }
+
+        private ICollection<CategoriaDTO> ConvertCategoriaToDto(IEnumerable<Categoria> categorias)
+        {
+            ICollection<CategoriaDTO> dtoCategorias = new List<CategoriaDTO>();
+
+            foreach (Categoria conhecimento in categorias)
+            {
+                CategoriaDTO dto = _mapper.Map<CategoriaDTO>(conhecimento);
+
+                dtoCategorias.Add(dto);
+            }
+
+            return dtoCategorias;
         }
     }
 }

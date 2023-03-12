@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepositorioDeConhecimento.Infrastructure.Helpers.Messages;
 using RepositorioDeConhecimento.Models.Application.DTO;
 using RepositorioDeConhecimento.Models.Domain.Entities;
@@ -29,25 +30,35 @@ namespace RepositorioDeConhecimento.Controllers
         /// </summary>
         /// <returns>Conhecinentos</returns>
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int offset = 20, int numberOfRecords = 20)
+        public async Task<IActionResult> Index(int page = 1, int offset = 20, int numberOfRecords = 20, string searchTerm = "")
         {
-            IEnumerable<Conhecimento> conhecimentos = await _repository.GetByPages(page, offset, numberOfRecords);
+            IEnumerable<Conhecimento> conhecimentos;
 
-            ICollection<ConhecimentoDTO> dtoConhecimentos = new List<ConhecimentoDTO>();
-
-            foreach (Conhecimento conhecimento in conhecimentos)
+            if (!string.IsNullOrEmpty(searchTerm) || !string.IsNullOrWhiteSpace(searchTerm))
             {
-                ConhecimentoDTO dto = _mapper.Map<ConhecimentoDTO>(conhecimento);
+                conhecimentos = await _repository.GetWhere(c =>
+                                                        c.Titulo.Contains(searchTerm) ||
+                                                        c.Conteudo.Contains(searchTerm) ||
+                                                        c.Autor.Nome.Contains(searchTerm) ||
+                                                        c.Categoria.Nome.Contains(searchTerm));
 
-                dtoConhecimentos.Add(dto);
+                if (conhecimentos.Any())
+                {
+                    ViewBag.TotalOfPages = 0;
+                    ViewBag.CurrentPage = 0;
+
+                    return View(ConvertConhecimentoToDto(conhecimentos));
+                }
             }
+
+            conhecimentos = await _repository.GetByPages(page, offset, numberOfRecords);
 
             int totalOfRecords = await _repository.CountRecords();
 
             ViewBag.TotalOfPages = Math.Ceiling(Convert.ToDecimal(totalOfRecords) / offset);
             ViewBag.CurrentPage = page;
 
-            return View(dtoConhecimentos);
+            return View(ConvertConhecimentoToDto(conhecimentos));
         }
 
         /// <summary>
@@ -151,6 +162,20 @@ namespace RepositorioDeConhecimento.Controllers
             return RedirectToAction("Index");
         }
 
+        private ICollection<ConhecimentoDTO> ConvertConhecimentoToDto(IEnumerable<Conhecimento> conhecimentos)
+        {
+            ICollection<ConhecimentoDTO> dtoConhecimentos = new List<ConhecimentoDTO>();
+
+            foreach (Conhecimento conhecimento in conhecimentos)
+            {
+                ConhecimentoDTO dto = _mapper.Map<ConhecimentoDTO>(conhecimento);
+
+                dtoConhecimentos.Add(dto);
+            }
+
+            return dtoConhecimentos;
+        }
+
         private async Task<ConhecimentoViewModel> ConvertToConhecimentoViewModel(ConhecimentoDTO conhecimentoDTO)
         {
             ConhecimentoViewModel viewModel = new ConhecimentoViewModel();
@@ -209,6 +234,5 @@ namespace RepositorioDeConhecimento.Controllers
 
             return autoresDTO;
         }
-
     }
 }

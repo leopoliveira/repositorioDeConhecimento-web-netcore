@@ -1,4 +1,4 @@
-1. Paginação dos dados das Views Index;
+1. Paginação dos dados das Views Index; -> OK
 2. Botão de pesquisa na barra de navegação;
 3. Botão de pesquisa nas Views Index;
 4. Botão de clonar registro nas Views de Save;
