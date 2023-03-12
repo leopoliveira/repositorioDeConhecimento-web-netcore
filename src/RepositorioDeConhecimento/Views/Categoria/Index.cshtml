@@ -2,6 +2,15 @@
 
 @{
     ViewData["Title"] = "Categorias";
+
+    int totalOfPages = (int)ViewBag.TotalOfPages;
+    int currentPage = (int)ViewBag.CurrentPage;
+
+    int nextPage = totalOfPages > currentPage ? currentPage + 1 : 0;
+    int previousPage = currentPage > 1 ? currentPage - 1 : 0;
+
+    bool hasNextPage = nextPage > 0;
+    bool hasPreviousPage = previousPage > 0;
 }
 
 <div class="container-sm mt-4">
@@ -51,6 +60,20 @@
                 </tbody>
             </table>
         </div>
+        @if (totalOfPages > 1)
+        {
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(hasPreviousPage ? "" : "disabled")">
+                        <a class="page-link" asp-controller="Categoria" asp-action="Index" asp-route-page="@previousPage">Anterior</a>
+                    </li>
+                    <li class="page-item @(hasNextPage ? "" : "disabled")">
+                        <a class="page-link" asp-controller="Categoria" asp-action="Index" asp-route-page="@nextPage">Próxima</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+
     }
     else
     {

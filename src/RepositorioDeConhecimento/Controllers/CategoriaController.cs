@@ -38,6 +38,11 @@ namespace RepositorioDeConhecimento.Controllers
                 dtoCategorias.Add(dto);
             }
 
+            int totalOfRecords = await _repository.CountRecords();
+
+            ViewBag.TotalOfPages = Math.Ceiling(Convert.ToDecimal(totalOfRecords) / offset);
+            ViewBag.CurrentPage = page;
+
             return View(dtoCategorias);
         }
 

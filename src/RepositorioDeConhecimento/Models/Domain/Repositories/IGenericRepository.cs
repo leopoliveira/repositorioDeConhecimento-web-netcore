@@ -11,6 +11,8 @@ namespace RepositorioDeConhecimento.Models.Domain.Repositories
 
         Task<IEnumerable<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate);
 
+        Task<int> CountRecords();
+
         Task Insert(TEntity entity);
 
         Task InsertRange(IEnumerable<TEntity> entities);

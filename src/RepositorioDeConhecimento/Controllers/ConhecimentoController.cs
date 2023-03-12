@@ -29,7 +29,7 @@ namespace RepositorioDeConhecimento.Controllers
         /// </summary>
         /// <returns>Conhecinentos</returns>
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int offset = 10, int numberOfRecords = 50)
+        public async Task<IActionResult> Index(int page = 1, int offset = 20, int numberOfRecords = 20)
         {
             IEnumerable<Conhecimento> conhecimentos = await _repository.GetByPages(page, offset, numberOfRecords);
 
@@ -41,6 +41,11 @@ namespace RepositorioDeConhecimento.Controllers
 
                 dtoConhecimentos.Add(dto);
             }
+
+            int totalOfRecords = await _repository.CountRecords();
+
+            ViewBag.TotalOfPages = Math.Ceiling(Convert.ToDecimal(totalOfRecords) / offset);
+            ViewBag.CurrentPage = page;
 
             return View(dtoConhecimentos);
         }

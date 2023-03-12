@@ -38,6 +38,11 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
                         .ToListAsync();
         }
 
+        public virtual async Task<int> CountRecords()
+        {
+            return await _context.Set<TEntity>().CountAsync();
+        }
+
         public async Task Insert(TEntity entity)
         {
             try
