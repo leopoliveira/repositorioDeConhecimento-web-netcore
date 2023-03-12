@@ -1,6 +1,6 @@
 1. Paginação dos dados das Views Index; -> OK
-2. Botão de pesquisa na barra de navegação;
-3. Botão de pesquisa nas Views Index;
+2. Botão de pesquisa na barra de navegação; -> OK
+3. Implementar Identity;
 4. Botão de clonar registro nas Views de Save;
 5. Possibilidade de abrir um Modal e criar uma Categoria ou Autor na View de Save do Conhecimento;
 6. Criar validações utilizando o FluentValidation;
