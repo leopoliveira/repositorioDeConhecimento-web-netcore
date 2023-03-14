@@ -6,5 +6,7 @@ namespace RepositorioDeConhecimento.Models.Domain.Entities
     {
         [Key]
         public int Id { get; set; }
+
+        public int IdUsuario { get; set; }
     }
 }
