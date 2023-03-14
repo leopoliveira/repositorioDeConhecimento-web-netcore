@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RepositorioDeConhecimento.Infrastructure.Helpers.Messages;
 using RepositorioDeConhecimento.Models.Application.DTO;
@@ -7,6 +8,7 @@ using RepositorioDeConhecimento.Models.Domain.Repositories;
 
 namespace RepositorioDeConhecimento.Controllers
 {
+    [Authorize]
     public class TagController : Controller
     {
         private readonly ITagRepository _repository;

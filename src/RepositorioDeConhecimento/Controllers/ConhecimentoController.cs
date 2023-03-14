@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepositorioDeConhecimento.Infrastructure.Helpers.Messages;
@@ -10,6 +11,7 @@ using System.Collections;
 
 namespace RepositorioDeConhecimento.Controllers
 {
+    [Authorize]
     public class ConhecimentoController : Controller
     {
         private readonly IConhecimentoRepository _repository;

@@ -51,7 +51,6 @@ namespace RepositorioDeConhecimento
             {
                 // Cookies Settings
                 options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromMinutes(5);
 
                 options.SlidingExpiration = true;
             });
@@ -85,7 +84,7 @@ namespace RepositorioDeConhecimento
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Conhecimento}/{action=Index}/{id?}");
+                pattern: "{controller=Usuario}/{action=Index}/{id?}");
 
             app.Run();
         }

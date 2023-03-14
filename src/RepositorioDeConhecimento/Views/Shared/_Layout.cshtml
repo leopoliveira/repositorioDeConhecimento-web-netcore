@@ -1,5 +1,7 @@
 ﻿@{ 
     var controller = (string)ViewContext.RouteData.Values["controller"];
+
+    bool isAuthenticated = User.Identity.IsAuthenticated;
 }
 
 <!DOCTYPE html>
@@ -22,23 +24,39 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarColor03">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" asp-controller="Conhecimento" asp-action="Index">Repositório</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Categoria" asp-action="Index">Categorias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Autor" asp-action="Index">Autores</a>
-                        </li>
-                    </ul>
-                    <form method="get" class="d-flex" asp-controller="@controller" asp-action="Index">
-                        <input name="searchTerm" class="form-control me-sm-2" type="text" placeholder="Buscar">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Buscar</button>
-                    </form>
-                </div>
+                @if (isAuthenticated)
+                {
+                    <div class="collapse navbar-collapse" id="navbarColor03">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" asp-controller="Conhecimento" asp-action="Index">Repositório</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Categoria" asp-action="Index">Categorias</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Autor" asp-action="Index">Autores</a>
+                            </li>
+                        </ul>
+                        <form method="get" class="d-flex" asp-controller="@controller" asp-action="Index">
+                            <input name="searchTerm" class="form-control me-sm-2" type="text" placeholder="Buscar">
+                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Buscar</button>
+                        </form>
+                    </div>
+            }
+            else
+            {
+            <div class="collapse navbar-collapse" id="navbarColor03">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-controller="Usuario" asp-action="Login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Usuario" asp-action="Registrar">Registrar</a>
+                    </li>
+                </ul>
+            </div>
+            }
             </div>
         </nav>
     </header>

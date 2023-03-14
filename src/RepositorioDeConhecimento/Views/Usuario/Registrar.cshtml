@@ -1,0 +1,85 @@
+﻿@model RegistrarUsuarioViewModel
+
+@{
+    ViewData["Title"] = "Registrar";
+}
+
+<div class="container-sm mt-4">
+
+    <div class="row g-lg-3 text-center">
+        <div class="col-lg-3">
+            <h1>
+                Registrar
+            </h1>
+
+        </div>
+
+        <hr />
+
+    </div>
+</div>
+
+<div class="container mt-4 d-flex justify-content-center">
+    <form method="POST" asp-controller="Usuario" asp-action="Login" class="col-md-6">
+        <!-- User and Email input -->
+        <div class="row">
+            <div class="form-outline mb-4 col-md-6">
+                <label class="form-label" asp-for="Usuario">Usuario: </label>
+                <input type="email" asp-for="Usuario" class="form-control" />
+                <span asp-validation-for="Usuario"></span>
+            </div>
+            <div class="form-outline mb-4 col-md-6">
+                <label class="form-label" asp-for="Email">E-mail: </label>
+                <input type="email" asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email"></span>
+            </div>
+        </div>
+
+        <!-- Password input -->
+        <div class="row">
+            <div class="form-outline mb-4 col-md-12">
+                <label class="form-label" asp-for="Senha">Senha: </label>
+                <input type="password" asp-for="Senha" class="form-control" />
+                <span asp-validation-for="Senha"></span>
+            </div>
+        </div>
+        <!-- Password input -->
+        <div class="row">
+            <div class="form-outline mb-4 col-md-12">
+                <label class="form-label" asp-for="ConfirmacaoSenha">Confirmar Senha: </label>
+                <input type="password" asp-for="ConfirmacaoSenha" class="form-control" />
+                <span asp-validation-for="ConfirmacaoSenha"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-outline mb-4 col-md-12">
+                Já tem uma conta ? <a asp-controller="Usuario" asp-action="Index">Faça login.</a>
+            </div>
+        </div>
+
+        <!-- Submit button -->
+        <button type="button" class="btn btn-lg btn-primary mb-4">Registrar</button>
+
+        <!-- Register buttons
+        <div class="text-center">
+            <p>Not a member? <a href="#!">Register</a></p>
+            <p>or sign up with:</p>
+            <button type="button" class="btn btn-link btn-floating mx-1">
+                <i class="fab fa-facebook-f"></i>
+            </button>
+
+            <button type="button" class="btn btn-link btn-floating mx-1">
+                <i class="fab fa-google"></i>
+            </button>
+
+            <button type="button" class="btn btn-link btn-floating mx-1">
+                <i class="fab fa-twitter"></i>
+            </button>
+
+            <button type="button" class="btn btn-link btn-floating mx-1">
+                <i class="fab fa-github"></i>
+            </button>
+        </div>-->
+    </form>
+</div>

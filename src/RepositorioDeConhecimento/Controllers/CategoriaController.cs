@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepositorioDeConhecimento.Infrastructure.Helpers.Messages;
@@ -9,6 +10,7 @@ using System.Xml;
 
 namespace RepositorioDeConhecimento.Controllers
 {
+    [Authorize]
     public class CategoriaController : Controller
     {
         private readonly ICategoriaRepository _repository;
