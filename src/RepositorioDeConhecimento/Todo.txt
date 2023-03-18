@@ -2,10 +2,10 @@
 2. Botão de pesquisa na barra de navegação; -> OK
 3. Implementar Identity; -> Ok
 	3.1. Relacionar o usuário logado com as Categorias e Conhecimento. -> Ok
-4. Botão de clonar registro nas Views de Save;
+4. Botão de clonar registro nas Views de Save; -> Ok
 5. Possibilidade de abrir um Modal e criar uma Categoria ou Autor na View de Save do Conhecimento;
 6. Criar validações utilizando o FluentValidation;
 7. Criar os testes unitários;
-8. Levar a aplicação para Nuvem;
-9. Criar um Dashboard para o usuário;
-10. Arrumar a animação de Página atual nos itens do menu superior;
+8. Criar um Dashboard para o usuário;
+9. Arrumar a animação de Página atual nos itens do menu superior;
+10. Levar a aplicação para Nuvem;
