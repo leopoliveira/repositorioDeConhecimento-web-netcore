@@ -26,5 +26,7 @@ namespace RepositorioDeConhecimento.Models.Application.DTO
         public ICollection<ImagemDTO>? Imagens { get; set; }
 
         public ICollection<TagDTO>? Tags { get; set; }
+
+        public int UsuarioId { get; set; }
     }
 }

@@ -95,6 +95,16 @@ namespace RepositorioDeConhecimento.Controllers
             }
             else
             {
+                bool existeSigla = await _repository.AnySiglaExists(autor.Sigla, base.GetUserId());
+
+                if (existeSigla)
+                {
+                    TempData["message"] = Message.CreateMessage("Erro. Já existe um Autor com essa sigla", MessageType.Error);
+                    return View(dto);
+                }
+
+                autor.IdUsuario = base.GetUserId();
+
                 await _repository.Insert(autor);
             }
 
@@ -154,6 +164,37 @@ namespace RepositorioDeConhecimento.Controllers
             TempData["message"] = Message.CreateMessage("Dados excluídos com sucesso!", MessageType.Success);
 
             return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Clona um Autor.
+        /// </summary>
+        /// <param name="id">Id do Autor a ser clonado.</param>
+        /// <returns>A View com o registro a ser salvo.</returns>
+        [HttpGet]
+        public async Task<IActionResult> Clonar(int id)
+        {
+            if (id <= 0)
+            {
+                return RedirectToAction("GetAutor", new { id = 0 });
+            }
+
+            int usuarioId = base.GetUserId();
+
+            Autor autorAtual = await _repository.GetById(id, usuarioId);
+
+            if (autorAtual == null)
+            {
+                return RedirectToAction("GetAutor", new { id = 0 });
+            }
+
+            Autor autorClone = _mapper.Map<Autor>(autorAtual);
+
+            autorClone.Id = 0;
+
+            AutorDTO dto = _mapper.Map<AutorDTO>(autorClone) ?? new AutorDTO();
+
+            return View(dto);
         }
 
         private ICollection<AutorDTO> ConvertAutorToDto(IEnumerable<Autor> autores)

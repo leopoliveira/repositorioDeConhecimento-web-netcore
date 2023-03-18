@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using RepositorioDeConhecimento.Infrastructure.Context;
+using RepositorioDeConhecimento.Infrastructure.Helpers.Messages;
 using RepositorioDeConhecimento.Models.Domain.Entities;
 using RepositorioDeConhecimento.Models.Domain.Repositories;
 using RepositorioDeConhecimento.Models.ViewModels;
@@ -54,19 +55,19 @@ namespace RepositorioDeConhecimento.Controllers
 
                 if (usuarioExiste)
                 {
-                    ModelState.AddModelError(string.Empty, "Usuário já existe!");
+                    TempData["message"] = Message.CreateMessage("Erro. Usuário já existente.", MessageType.Error);
                     return View(model);
                 }
 
                 if (emailExiste)
                 {
-                    ModelState.AddModelError(string.Empty, "E-mail já existe!");
+                    TempData["message"] = Message.CreateMessage("Erro. E-mail já existente.", MessageType.Error);
                     return View(model);
                 }
 
                 if (autorComASigla?.Count() > 0)
                 {
-                    ModelState.AddModelError(string.Empty, "Sigla já existe!");
+                    TempData["message"] = Message.CreateMessage("Erro. Sigla já existente.", MessageType.Error);
                     return View(model);
                 }
 
@@ -117,7 +118,7 @@ namespace RepositorioDeConhecimento.Controllers
                     return RedirectToAction("Index", "Conhecimento");
                 }
 
-                ModelState.AddModelError(string.Empty, "Erro ao fazer login!");
+                TempData["message"] = Message.CreateMessage("Erro ao fazer Login.", MessageType.Error);
             }
 
             return View("Index", model);
@@ -128,14 +129,22 @@ namespace RepositorioDeConhecimento.Controllers
         {
             await _signInManager.SignOutAsync();
 
+            TempData["message"] = Message.CreateMessage("Até a próxima!", MessageType.Success);
+
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult RecuperaSenha()
+        public IActionResult RecuperaSenha(RegistrarUsuarioViewModel model)
         {
             return Ok();
         }
+
+        /*[HttpGet]
+        public async Task<IActionResult> EditarUsuario(RegistrarUsuarioViewModel model)
+        {
+        
+        }*/
 
         private async Task CadastraAutor(string nomeCompleto, string sigla, string email, int usuarioId)
         {

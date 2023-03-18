@@ -89,15 +89,17 @@ namespace RepositorioDeConhecimento.Controllers
 
             dto.IconeId ??= 0;
 
-            Categoria conhecimento = _mapper.Map<Categoria>(dto);
+            Categoria categoria = _mapper.Map<Categoria>(dto);
 
-            if(conhecimento.Id > 0)
+            if(categoria.Id > 0)
             {
-                await _repository.Update(conhecimento);
+                await _repository.Update(categoria);
             }
             else
             {
-                await _repository.Insert(conhecimento);
+                categoria.IdUsuario = base.GetUserId();
+
+                await _repository.Insert(categoria);
             }
             
 
@@ -156,6 +158,37 @@ namespace RepositorioDeConhecimento.Controllers
             TempData["message"] = Message.CreateMessage("Dados excluídos com sucesso!", MessageType.Success);
 
             return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Clona uma Categoria.
+        /// </summary>
+        /// <param name="id">Id da Categoria a ser clonada.</param>
+        /// <returns>A View com o registro a ser salvo.</returns>
+        [HttpGet]
+        public async Task<IActionResult> Clonar(int id)
+        {
+            if (id <= 0)
+            {
+                return RedirectToAction("GetCategoria", new { id = 0 });
+            }
+
+            int usuarioId = base.GetUserId();
+
+            Categoria categoriaAtual = await _repository.GetById(id, usuarioId); 
+
+            if (categoriaAtual == null)
+            {
+                return RedirectToAction("GetCategoria", new { id = 0 });
+            }
+
+            Categoria categoriaClone = _mapper.Map<Categoria>(categoriaAtual);
+
+            categoriaClone.Id = 0;
+
+            CategoriaDTO dto = _mapper.Map<CategoriaDTO>(categoriaClone);
+
+            return View(dto);
         }
 
         private ICollection<CategoriaDTO> ConvertCategoriaToDto(IEnumerable<Categoria> categorias)

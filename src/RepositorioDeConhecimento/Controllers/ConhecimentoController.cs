@@ -110,6 +110,8 @@ namespace RepositorioDeConhecimento.Controllers
             }
             else
             {
+                conhecimento.IdUsuario = base.GetUserId();
+                
                 await _repository.Insert(conhecimento);
             }
 
@@ -169,6 +171,35 @@ namespace RepositorioDeConhecimento.Controllers
             TempData["message"] = Message.CreateMessage("Dados excluídos com sucesso!", MessageType.Success);
 
             return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Clona um Conhecimento.
+        /// </summary>
+        /// <param name="id">Id do Conhecimento a ser clonado.</param>
+        /// <returns>A View com o registro a ser salvo.</returns>
+        [HttpGet]
+        public async Task<IActionResult> Clonar(int id)
+        {
+            if (id <= 0)
+            {
+                return RedirectToAction("GetConhecimento", new { id = 0 });
+            }
+
+            int usuarioId = base.GetUserId();
+
+            Conhecimento conhecimentoAtual = await _repository.GetById(id, usuarioId);
+
+            if (conhecimentoAtual == null)
+            {
+                return RedirectToAction("GetConhecimento", new { id = 0 });
+            }
+
+            Conhecimento conhecimentoClone = _mapper.Map<Conhecimento>(conhecimentoAtual);
+
+            ConhecimentoViewModel viewModel = await ConvertToConhecimentoViewModel(_mapper.Map<ConhecimentoDTO>(conhecimentoClone));
+
+            return View(viewModel);
         }
 
         private ICollection<ConhecimentoDTO> ConvertConhecimentoToDto(IEnumerable<Conhecimento> conhecimentos)

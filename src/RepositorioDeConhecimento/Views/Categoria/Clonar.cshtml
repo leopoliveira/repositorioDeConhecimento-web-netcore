@@ -1,8 +1,7 @@
 ﻿@model CategoriaDTO
 
 @{
-    string acao = ViewContext.RouteData.Values["id"] != null ? "Editar" : "Criar";
-    ViewData["Title"] = acao + " Categoria";
+    ViewData["Title"] = "Criar Categoria";
 }
 
 <div class="container-sm mt-4">
@@ -10,20 +9,13 @@
     <div class="row g-lg-3 text-center">
         <div class="col-lg-4">
             <h1>
-                @acao Categoria
+                @ViewData["Title"]
             </h1>
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-4 offset-lg-4">
             <a class="btn btn-lg btn-danger" asp-action="Index">Cancelar</a>
         </div>
-
-        @if (acao == "Editar")
-        {
-            <div class="col-lg-4">
-                <a class="btn btn-lg btn-warning" asp-action="Clonar" asp-route-id="@Model.Id">Clonar</a>
-            </div>
-        }
 
     </div>
 
@@ -36,7 +28,6 @@
 
     <div class="mt-3 row">
         <form method="post" asp-controller="Categoria" asp-action="Save" class="row g-3">
-            <input hidden asp-for="Id" />
             <input hidden asp-for="IdUsuario" />
 
             <div class="col-lg-12 form-group">

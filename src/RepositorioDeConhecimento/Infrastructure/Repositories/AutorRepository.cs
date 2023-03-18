@@ -31,5 +31,11 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
                 .OrderBy(a => a.Nome)
                 .ToListAsync();
         }
+
+        public async Task<bool> AnySiglaExists(string sigla, int idUsuario)
+        {
+            return await _context.Autores
+                        .AnyAsync(a => a.IdUsuario == idUsuario && a.Sigla.ToUpper() == sigla.ToUpper());
+        }
     }
 }

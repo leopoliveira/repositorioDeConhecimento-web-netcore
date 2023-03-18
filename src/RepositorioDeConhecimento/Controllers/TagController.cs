@@ -81,6 +81,8 @@ namespace RepositorioDeConhecimento.Controllers
             }
             else
             {
+                tag.IdUsuario = base.GetUserId();
+
                 await _repository.Insert(tag);
             }
 

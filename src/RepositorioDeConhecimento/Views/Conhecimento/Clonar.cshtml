@@ -1,8 +1,7 @@
 ﻿@model ConhecimentoViewModel
 
 @{
-    string acao = ViewContext.RouteData.Values["id"] != null ? "Editar" : "Criar";
-    ViewData["Title"] = acao + " Conhecimento";
+    ViewData["Title"] = "Criar Conhecimento";
 
     bool temAutorCadastrado = Model.Autores != null;
     bool temCategoriaCadastrada = Model.Categorias != null;
@@ -13,20 +12,13 @@
     <div class="row g-lg-3 text-center">
         <div class="col-lg-4">
             <h1>
-                @acao Conhecimento
+                @ViewData["Title"]
             </h1>
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-4 offset-lg-4">
             <a class="btn btn-lg btn-danger" asp-action="Index">Cancelar</a>
         </div>
-
-        @if (acao == "Editar")
-        {
-            <div class="col-lg-4">
-                <a class="btn btn-lg btn-warning" asp-action="Clonar" asp-route-id="@Model.Conhecimento.Id">Clonar</a>
-            </div>
-        }
 
     </div>
 
@@ -39,7 +31,6 @@
 
     <div class="mt-3 row">
         <form method="post" asp-controller="Conhecimento" asp-action="Save" class="row g-3">
-            <input hidden asp-for="Conhecimento.Id" />
             <input hidden asp-for="Conhecimento.IdUsuario" />
 
             <div class="col-lg-12 form-group">
