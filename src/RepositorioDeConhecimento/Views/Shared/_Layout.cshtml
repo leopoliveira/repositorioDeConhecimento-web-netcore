@@ -1,7 +1,7 @@
 ﻿@{ 
     var controller = (string)ViewContext.RouteData.Values["controller"];
 
-    bool isAuthenticated = User.Identity.IsAuthenticated;
+    bool isAuthenticated = User?.Identity != null && User.Identity.IsAuthenticated;
 }
 
 <!DOCTYPE html>
@@ -29,13 +29,16 @@
                     <div class="collapse navbar-collapse" id="navbarColor03">
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item">
-                                <a class="nav-link active" asp-controller="Conhecimento" asp-action="Index">Repositório</a>
+                                <a class="nav-link active" asp-controller="Conhecimento" asp-action="Index">Conhecimentos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Categoria" asp-action="Index">Categorias</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Autor" asp-action="Index">Autores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Usuario" asp-action="Logout">Logout</a>
                             </li>
                         </ul>
                         <form method="get" class="d-flex" asp-controller="@controller" asp-action="Index">

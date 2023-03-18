@@ -20,18 +20,31 @@
 </div>
 
 <div class="container mt-4 d-flex justify-content-center">
-    <form method="POST" asp-controller="Usuario" asp-action="Login" class="col-md-6">
+    <form method="POST" asp-controller="Usuario" asp-action="Registrar" class="col-md-6">
         <!-- User and Email input -->
         <div class="row">
             <div class="form-outline mb-4 col-md-6">
                 <label class="form-label" asp-for="Usuario">Usuario: </label>
-                <input type="email" asp-for="Usuario" class="form-control" />
+                <input type="text" asp-for="Usuario" class="form-control" />
                 <span asp-validation-for="Usuario"></span>
             </div>
             <div class="form-outline mb-4 col-md-6">
                 <label class="form-label" asp-for="Email">E-mail: </label>
                 <input type="email" asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-outline mb-4 col-md-6">
+                <label class="form-label" asp-for="NomeCompleto">Nome Completo: </label>
+                <input type="text" asp-for="NomeCompleto" class="form-control" />
+                <span asp-validation-for="NomeCompleto"></span>
+            </div>
+            <div class="form-outline mb-4 col-md-6">
+                <label class="form-label" asp-for="Sigla">Sigla: </label>
+                <input type="text" asp-for="Sigla" class="form-control" />
+                <span asp-validation-for="Sigla"></span>
             </div>
         </div>
 
@@ -59,27 +72,27 @@
         </div>
 
         <!-- Submit button -->
-        <button type="button" class="btn btn-lg btn-primary mb-4">Registrar</button>
+        <button type="submit" class="btn btn-lg btn-primary mb-4">Registrar</button>
 
         <!-- Register buttons
-        <div class="text-center">
-            <p>Not a member? <a href="#!">Register</a></p>
-            <p>or sign up with:</p>
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-facebook-f"></i>
-            </button>
+    <div class="text-center">
+        <p>Not a member? <a href="#!">Register</a></p>
+        <p>or sign up with:</p>
+        <button type="button" class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-facebook-f"></i>
+        </button>
 
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-google"></i>
-            </button>
+        <button type="button" class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-google"></i>
+        </button>
 
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-twitter"></i>
-            </button>
+        <button type="button" class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-twitter"></i>
+        </button>
 
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-github"></i>
-            </button>
-        </div>-->
+        <button type="button" class="btn btn-link btn-floating mx-1">
+            <i class="fab fa-github"></i>
+        </button>
+    </div>-->
     </form>
 </div>

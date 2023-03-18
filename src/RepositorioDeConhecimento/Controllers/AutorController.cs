@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RepositorioDeConhecimento.Infrastructure.Helpers.Messages;
 using RepositorioDeConhecimento.Models.Application.DTO;
@@ -9,12 +10,12 @@ using RepositorioDeConhecimento.Models.Domain.Repositories;
 namespace RepositorioDeConhecimento.Controllers
 {
     [Authorize]
-    public class AutorController : Controller
+    public class AutorController : BaseController
     {
         private readonly IAutorRepository _repository;
         private readonly IMapper _mapper;
 
-        public AutorController(IAutorRepository repository, IMapper mapper)
+        public AutorController(IAutorRepository repository, IMapper mapper, UserManager<IdentityUser<int>> userManager) : base (userManager)
         {
             _repository = repository;
             _mapper = mapper;
@@ -27,13 +28,15 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1, int offset = 10, int numberOfRecords = 10, string searchTerm = "")
         {
+            int usuarioId = base.GetUserId();
+
             IEnumerable<Autor> autores;
 
             if (!string.IsNullOrEmpty(searchTerm) || !string.IsNullOrWhiteSpace(searchTerm))
             {
-                autores = await _repository.GetWhere(a =>
-                                                    a.Nome.Contains(searchTerm) ||
-                                                    a.Email.Contains(searchTerm));
+                autores = await _repository.GetWhere(a => a.IdUsuario == usuarioId &&
+                                                    (a.Nome.Contains(searchTerm) ||
+                                                    a.Email.Contains(searchTerm)));
 
                 ViewBag.TotalOfPages = 0;
                 ViewBag.CurrentPage = 0;
@@ -41,9 +44,9 @@ namespace RepositorioDeConhecimento.Controllers
                 return View(ConvertAutorToDto(autores));
             }
 
-            autores = await _repository.GetByPages(page, offset, numberOfRecords);
+            autores = await _repository.GetByPages(usuarioId, page, offset, numberOfRecords);
 
-            int totalOfRecords = await _repository.CountRecords();
+            int totalOfRecords = await _repository.CountRecords(usuarioId);
 
             ViewBag.TotalOfPages = Math.Ceiling(Convert.ToDecimal(totalOfRecords) / offset);
             ViewBag.CurrentPage = page;
@@ -58,7 +61,9 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAutor(int id)
         {
-            Autor autor = await _repository.GetById(id);
+            int usuarioId = base.GetUserId();
+
+            Autor autor = await _repository.GetById(id, usuarioId);
 
             AutorDTO dto = _mapper.Map<AutorDTO>(autor) ?? new AutorDTO();
 
@@ -107,13 +112,15 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
+            int usuarioId = base.GetUserId();
+
             if (id <= 0)
             {
                 TempData["message"] = Message.CreateMessage("Erro. Informe um Id válido", MessageType.Error);
                 return View("Index");
             }
 
-            Autor autor = await _repository.GetById(id);
+            Autor autor = await _repository.GetById(id, usuarioId);
 
             if (autor == null)
             {

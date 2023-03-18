@@ -20,5 +20,14 @@ namespace RepositorioDeConhecimento.Models.ViewModels
         [Display(Name = "Confirmação de Senha")]
         [Compare("Senha", ErrorMessage = "As senhas não conferem.")]
         public string ConfirmacaoSenha { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [Display(Name = "Nome Completo")]
+        public string NomeCompleto { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [Display(Name = "Sigla")]
+        [StringLength(3)]
+        public string Sigla { get; set; }
     }
 }

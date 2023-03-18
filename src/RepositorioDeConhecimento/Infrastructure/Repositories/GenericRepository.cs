@@ -16,15 +16,16 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             _context = context;
         }
 
-        public virtual async Task<TEntity> GetById(int id)
+        public virtual async Task<TEntity> GetById(int id, int idUsuario)
         {
             return await _context.Set<TEntity>()
-                        .FirstOrDefaultAsync(entity => entity.Id == id);
+                        .FirstOrDefaultAsync(entity => entity.Id == id && entity.IdUsuario == idUsuario);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetByPages(int page = 1, int offset = 10, int numberOfRecords = 10)
+        public virtual async Task<IEnumerable<TEntity>> GetByPages(int idUsuario, int page = 1, int offset = 10, int numberOfRecords = 10)
         {
             return await _context.Set<TEntity>()
+                        .Where(entity => entity.IdUsuario == idUsuario)
                         .Skip((page - 1) * offset)
                         .Take(numberOfRecords)
                         .OrderBy(entity => entity.Id)
@@ -38,9 +39,9 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
                         .ToListAsync();
         }
 
-        public virtual async Task<int> CountRecords()
+        public virtual async Task<int> CountRecords(int idUsuario)
         {
-            return await _context.Set<TEntity>().CountAsync();
+            return await _context.Set<TEntity>().Where(entity => entity.IdUsuario == idUsuario).CountAsync();
         }
 
         public async Task Insert(TEntity entity)

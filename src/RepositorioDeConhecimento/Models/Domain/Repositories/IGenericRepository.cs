@@ -5,13 +5,13 @@ namespace RepositorioDeConhecimento.Models.Domain.Repositories
 {
     public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        Task<TEntity> GetById(int id);
+        Task<TEntity> GetById(int id, int idUsuario);
 
-        Task<IEnumerable<TEntity>> GetByPages(int page = 1, int offset = 10, int numberOfRecords = 10);
+        Task<IEnumerable<TEntity>> GetByPages(int idUsuario, int page = 1, int offset = 10, int numberOfRecords = 10);
 
         Task<IEnumerable<TEntity>> GetWhere(Expression<Func<TEntity, bool>> predicate);
 
-        Task<int> CountRecords();
+        Task<int> CountRecords(int idUsuario);
 
         Task Insert(TEntity entity);
 

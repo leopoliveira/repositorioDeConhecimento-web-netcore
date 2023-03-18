@@ -1,16 +1,40 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using RepositorioDeConhecimento.Infrastructure.Context;
+using RepositorioDeConhecimento.Models.Domain.Entities;
+using RepositorioDeConhecimento.Models.Domain.Repositories;
 using RepositorioDeConhecimento.Models.ViewModels;
 
 namespace RepositorioDeConhecimento.Controllers
 {
     [AllowAnonymous]
-    public class UsuarioController : Controller
+    [ValidateAntiForgeryToken] // Valida se o Token está na requisição
+    [AutoValidateAntiforgeryToken] // Valida o Token
+    public class UsuarioController : BaseController
     {
+        private readonly SignInManager<IdentityUser<int>> _signInManager;
+        private readonly UserManager<IdentityUser<int>> _userManager;
+        private readonly IAutorRepository _autorRepository;
+
+        public UsuarioController(SignInManager<IdentityUser<int>> signInManager, UserManager<IdentityUser<int>> userManager, IAutorRepository autorRepository) : base(userManager)
+        {
+            _signInManager = signInManager;
+            _userManager = userManager;
+            _autorRepository = autorRepository;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            if (User?.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+
+            return RedirectToAction("Index", "Conhecimento");
         }
 
         [HttpGet]
@@ -20,27 +44,110 @@ namespace RepositorioDeConhecimento.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registrar(LoginUsuarioViewModel model)
+        public async Task<IActionResult> Registrar(RegistrarUsuarioViewModel model)
         {
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                bool usuarioExiste = await _userManager.FindByNameAsync(model.Usuario) != null;
+                bool emailExiste = await _userManager.FindByEmailAsync(model.Email) != null;
+                IEnumerable<Autor> autorComASigla = await _autorRepository.GetWhere(a => a.Sigla == model.Sigla);
+
+                if (usuarioExiste)
+                {
+                    ModelState.AddModelError(string.Empty, "Usuário já existe!");
+                    return View(model);
+                }
+
+                if (emailExiste)
+                {
+                    ModelState.AddModelError(string.Empty, "E-mail já existe!");
+                    return View(model);
+                }
+
+                if (autorComASigla?.Count() > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Sigla já existe!");
+                    return View(model);
+                }
+
+                var usuario = new IdentityUser<int>
+                {
+                    UserName = model.Usuario,
+                    Email = model.Email
+                };
+
+                var resultadoCadastro = await _userManager.CreateAsync(usuario, model.Senha);
+
+                if (resultadoCadastro.Succeeded)
+                {
+                    await CadastraAutor(model.NomeCompleto, model.Sigla, model.Email, usuario.Id);
+
+                    await _signInManager.SignInAsync(usuario, isPersistent: false);
+
+                    return RedirectToAction("Index", "Conhecimento");
+                }
+
+                foreach (var error in resultadoCadastro.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Login(LoginUsuarioViewModel model)
+        public async Task<IActionResult> Login(LoginUsuarioViewModel model, string? redirectUrl)
         {
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                var resultadoLogin = await _signInManager
+                                        .PasswordSignInAsync(model.Usuario,
+                                                            model.Senha,
+                                                            isPersistent: model.LembrarMe,
+                                                            lockoutOnFailure: false);
+
+                if (resultadoLogin.Succeeded)
+                {
+                    if (Url.IsLocalUrl(redirectUrl))
+                    {
+                        return LocalRedirect(redirectUrl);
+                    }
+
+                    return RedirectToAction("Index", "Conhecimento");
+                }
+
+                ModelState.AddModelError(string.Empty, "Erro ao fazer login!");
+            }
+
+            return View("Index", model);
         }
 
-        [HttpPost]
-        public IActionResult Logout()
+        [HttpGet]
+        public async Task<IActionResult> Logout()
         {
-            return Ok();
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult RecuperaSenha()
         {
             return Ok();
+        }
+
+        private async Task CadastraAutor(string nomeCompleto, string sigla, string email, int usuarioId)
+        {
+            Autor autor = new Autor
+            {
+                Nome = nomeCompleto,
+                Sigla = sigla,
+                Email = email,
+                IdUsuario = usuarioId
+            };
+
+            await _autorRepository.Insert(autor);
         }
     }
 }

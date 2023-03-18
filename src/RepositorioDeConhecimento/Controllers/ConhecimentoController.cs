@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepositorioDeConhecimento.Infrastructure.Helpers.Messages;
@@ -12,14 +13,14 @@ using System.Collections;
 namespace RepositorioDeConhecimento.Controllers
 {
     [Authorize]
-    public class ConhecimentoController : Controller
+    public class ConhecimentoController : BaseController
     {
         private readonly IConhecimentoRepository _repository;
         private readonly ICategoriaRepository _categoriaRepository;
         private readonly IAutorRepository _autorRepository;
         private readonly IMapper _mapper;
 
-        public ConhecimentoController(IConhecimentoRepository conhecimentoRepository, ICategoriaRepository categoriaRepository, IAutorRepository autorRepository, IMapper mapper)
+        public ConhecimentoController(IConhecimentoRepository conhecimentoRepository, ICategoriaRepository categoriaRepository, IAutorRepository autorRepository, IMapper mapper, UserManager<IdentityUser<int>> userManager) : base(userManager)
         {
             _repository = conhecimentoRepository;
             _categoriaRepository = categoriaRepository;
@@ -34,15 +35,17 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1, int offset = 20, int numberOfRecords = 20, string searchTerm = "")
         {
+            int usuarioId = base.GetUserId();
+
             IEnumerable<Conhecimento> conhecimentos;
 
             if (!string.IsNullOrEmpty(searchTerm) || !string.IsNullOrWhiteSpace(searchTerm))
             {
-                conhecimentos = await _repository.GetWhere(c =>
-                                                        c.Titulo.Contains(searchTerm) ||
+                conhecimentos = await _repository.GetWhere(c => c.IdUsuario == usuarioId &&
+                                                        (c.Titulo.Contains(searchTerm) ||
                                                         c.Conteudo.Contains(searchTerm) ||
                                                         c.Autor.Nome.Contains(searchTerm) ||
-                                                        c.Categoria.Nome.Contains(searchTerm));
+                                                        c.Categoria.Nome.Contains(searchTerm)));
 
                 if (conhecimentos.Any())
                 {
@@ -53,9 +56,9 @@ namespace RepositorioDeConhecimento.Controllers
                 }
             }
 
-            conhecimentos = await _repository.GetByPages(page, offset, numberOfRecords);
+            conhecimentos = await _repository.GetByPages(usuarioId, page, offset, numberOfRecords);
 
-            int totalOfRecords = await _repository.CountRecords();
+            int totalOfRecords = await _repository.CountRecords(usuarioId);
 
             ViewBag.TotalOfPages = Math.Ceiling(Convert.ToDecimal(totalOfRecords) / offset);
             ViewBag.CurrentPage = page;
@@ -70,7 +73,9 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> GetConhecimento(int id)
         {
-            Conhecimento conhecimento = await _repository.GetById(id);
+            int usuarioId = base.GetUserId();
+
+            Conhecimento conhecimento = await _repository.GetById(id, usuarioId);
 
             ConhecimentoDTO dto = _mapper.Map<ConhecimentoDTO>(conhecimento) ?? new ConhecimentoDTO();
 
@@ -122,13 +127,15 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
+            int usuarioId = base.GetUserId();
+
             if (id <= 0)
             {
                 TempData["message"] = Message.CreateMessage("Erro. Informe um Id válido", MessageType.Error);
                 return View("Index");
             }
 
-            Conhecimento conhecimento = await _repository.GetById(id);
+            Conhecimento conhecimento = await _repository.GetById(id, usuarioId);
 
             if (conhecimento == null)
             {
@@ -205,7 +212,9 @@ namespace RepositorioDeConhecimento.Controllers
 
         private async Task<ICollection<CategoriaDTO>> GetCategorias()
         {
-            ICollection<Categoria> categorias = await _categoriaRepository.GetAll();
+            int usuarioId = base.GetUserId();
+
+            ICollection<Categoria> categorias = await _categoriaRepository.GetAll(usuarioId);
 
             ICollection<CategoriaDTO> categoriasDTO = new List<CategoriaDTO>();
 
@@ -222,7 +231,9 @@ namespace RepositorioDeConhecimento.Controllers
 
         private async Task<ICollection<AutorDTO>> GetAutores()
         {
-            ICollection<Autor> autores = await _autorRepository.GetAll();
+            int usuarioId = base.GetUserId();
+
+            ICollection<Autor> autores = await _autorRepository.GetAll(usuarioId);
 
             ICollection<AutorDTO> autoresDTO = new List<AutorDTO>();
 

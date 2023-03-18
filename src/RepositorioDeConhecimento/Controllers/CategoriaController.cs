@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepositorioDeConhecimento.Infrastructure.Helpers.Messages;
@@ -11,12 +12,12 @@ using System.Xml;
 namespace RepositorioDeConhecimento.Controllers
 {
     [Authorize]
-    public class CategoriaController : Controller
+    public class CategoriaController : BaseController
     {
         private readonly ICategoriaRepository _repository;
         private readonly IMapper _mapper;
 
-        public CategoriaController(ICategoriaRepository repository, IMapper mapper)
+        public CategoriaController(ICategoriaRepository repository, IMapper mapper, UserManager<IdentityUser<int>> userManager) : base(userManager)
         {
             _repository = repository;
             _mapper = mapper;
@@ -29,13 +30,15 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1, int offset = 10, int numberOfRecords = 10, string searchTerm = "")
         {
+            int usuarioId = base.GetUserId();
+
             IEnumerable<Categoria> categorias;
 
             if (!string.IsNullOrEmpty(searchTerm) || !string.IsNullOrWhiteSpace(searchTerm))
             {
-                categorias = await _repository.GetWhere(c =>
-                                                        c.Nome.Contains(searchTerm) ||
-                                                        c.Descricao.Contains(searchTerm));
+                categorias = await _repository.GetWhere(c => c.Id == usuarioId &&
+                                                        (c.Nome.Contains(searchTerm) ||
+                                                        c.Descricao.Contains(searchTerm)));
 
                 ViewBag.TotalOfPages = 0;
                 ViewBag.CurrentPage = 0;
@@ -43,9 +46,9 @@ namespace RepositorioDeConhecimento.Controllers
                 return View(ConvertCategoriaToDto(categorias));
             }
 
-            categorias = await _repository.GetByPages(page, offset, numberOfRecords);
+            categorias = await _repository.GetByPages(usuarioId, page, offset, numberOfRecords);
 
-            int totalOfRecords = await _repository.CountRecords();
+            int totalOfRecords = await _repository.CountRecords(usuarioId);
 
             ViewBag.TotalOfPages = Math.Ceiling(Convert.ToDecimal(totalOfRecords) / offset);
             ViewBag.CurrentPage = page;
@@ -60,7 +63,9 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCategoria(int id)
         {
-            Categoria conhecimento = await _repository.GetById(id);
+            int usuarioId = base.GetUserId();
+
+            Categoria conhecimento = await _repository.GetById(id, usuarioId);
 
             CategoriaDTO dto =  _mapper.Map<CategoriaDTO>(conhecimento) ?? new CategoriaDTO();
 
@@ -109,13 +114,15 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
+            int usuarioId = base.GetUserId();
+
             if (id <= 0)
             {
                 TempData["message"] = Message.CreateMessage("Erro. Informe um Id válido", MessageType.Error);
                 return View("Index");
             }
 
-            Categoria conhecimento = await _repository.GetById(id);
+            Categoria conhecimento = await _repository.GetById(id, usuarioId);
 
             if (conhecimento == null)
             {

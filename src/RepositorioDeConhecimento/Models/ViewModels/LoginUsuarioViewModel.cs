@@ -5,8 +5,7 @@ namespace RepositorioDeConhecimento.Models.ViewModels
     public class LoginUsuarioViewModel
     {
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public string Usuario { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         [DataType(DataType.Password)]
@@ -14,6 +13,6 @@ namespace RepositorioDeConhecimento.Models.ViewModels
 
         public bool LembrarMe { get; set; }
 
-        public string redirectURl { get; set; }
+        public string? redirectURl { get; set; }
     }
 }

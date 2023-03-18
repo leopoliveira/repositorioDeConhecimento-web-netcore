@@ -4,6 +4,6 @@ namespace RepositorioDeConhecimento.Models.Domain.Repositories
 {
     public interface IAutorRepository : IGenericRepository<Autor>
     {
-        Task<ICollection<Autor>> GetAll();
+        Task<ICollection<Autor>> GetAll(int idUsuario);
     }
 }

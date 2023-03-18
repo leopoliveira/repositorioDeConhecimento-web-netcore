@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RepositorioDeConhecimento.Infrastructure.Helpers.Messages;
 using RepositorioDeConhecimento.Models.Application.DTO;
@@ -9,12 +10,12 @@ using RepositorioDeConhecimento.Models.Domain.Repositories;
 namespace RepositorioDeConhecimento.Controllers
 {
     [Authorize]
-    public class TagController : Controller
+    public class TagController : BaseController
     {
         private readonly ITagRepository _repository;
         private readonly IMapper _mapper;
 
-        public TagController(ITagRepository repository, IMapper mapper)
+        public TagController(ITagRepository repository, IMapper mapper, UserManager<IdentityUser<int>> userManager) : base(userManager)
         {
             _repository = repository;
             _mapper = mapper;
@@ -48,7 +49,9 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTag(int id)
         {
-            Tag tag = await _repository.GetById(id);
+            int usuarioId = base.GetUserId();
+
+            Tag tag = await _repository.GetById(id, usuarioId);
 
             TagDTO dto = _mapper.Map<TagDTO>(tag) ?? new TagDTO();
 
@@ -95,13 +98,15 @@ namespace RepositorioDeConhecimento.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
+            int usuarioId = base.GetUserId();
+
             if (id <= 0)
             {
                 TempData["message"] = Message.CreateMessage("Erro. Informe um Id válido", MessageType.Error);
                 return View("Index");
             }
 
-            Tag tag = await _repository.GetById(id);
+            Tag tag = await _repository.GetById(id, usuarioId);
 
             if (tag == null)
             {

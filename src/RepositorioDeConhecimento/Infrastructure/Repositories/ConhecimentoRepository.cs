@@ -15,9 +15,10 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
             _context = context;
         }
 
-        public override async Task<IEnumerable<Conhecimento>> GetByPages(int page = 1, int offset = 10, int numberOfRecords = 10)
+        public override async Task<IEnumerable<Conhecimento>> GetByPages(int idUsuario, int page = 1, int offset = 10, int numberOfRecords = 10)
         {
             return await _context.Conhecimentos
+                .Where(c => c.IdUsuario == idUsuario)
                 .Include(c => c.Categoria)
                 .Include(c => c.Autor)
                 .OrderBy(c => c.Categoria.Nome)
@@ -26,9 +27,10 @@ namespace RepositorioDeConhecimento.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public override async Task<Conhecimento> GetById(int id)
+        public override async Task<Conhecimento> GetById(int id, int idUsuario)
         {
             return await _context.Conhecimentos
+                .Where(c => c.IdUsuario == idUsuario)
                 .Include(c => c.Categoria)
                 .Include(c => c.Autor)
                 .FirstOrDefaultAsync(c => c.Id == id);
