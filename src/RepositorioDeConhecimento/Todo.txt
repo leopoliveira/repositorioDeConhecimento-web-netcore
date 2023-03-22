@@ -3,7 +3,7 @@
 3. Implementar Identity; -> Ok
 	3.1. Relacionar o usuário logado com as Categorias e Conhecimento. -> Ok
 4. Botão de clonar registro nas Views de Save; -> Ok
-5. Possibilidade de abrir um Modal e criar uma Categoria ou Autor na View de Save do Conhecimento;
+5. Possibilidade de abrir um Modal e criar uma Categoria ou Autor na View de Save do Conhecimento; -> NOk
 6. Criar validações utilizando o FluentValidation;
 7. Criar os testes unitários;
 8. Criar um Dashboard para o usuário;

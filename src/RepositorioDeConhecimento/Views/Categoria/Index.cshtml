@@ -43,16 +43,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (CategoriaDTO conhecimento in Model)
+                    @foreach (CategoriaDTO categoria in Model)
                     {
                         <tr class="fs-6">
-                            <td class="align-middle text-center">@conhecimento.Nome</td>
+                            <td class="align-middle text-center">@categoria.Nome</td>
                             <td class="align-middle text-center">
-                                <a class="btn btn-lg btn-outline-danger" asp-action="Delete" asp-route-id="@conhecimento.Id">
+                                <a class="btn btn-lg btn-outline-danger" asp-action="Delete" asp-route-id="@categoria.Id">
                                     Apagar
                                 </a>
-                                <a class="btn btn-lg btn-outline-primary" asp-action="GetCategoria" asp-route-id="@conhecimento.Id">
+                                <a class="btn btn-lg btn-outline-primary" asp-action="GetCategoria" asp-route-id="@categoria.Id">
                                     Editar
+                                </a>
+                                <a class="btn btn-lg btn-outline-dark" asp-controller="Conhecimento" asp-action="Index" asp-route-searchTerm="@categoria.Nome">
+                                    Conhecimentos
                                 </a>
                             </td>
                         </tr>
